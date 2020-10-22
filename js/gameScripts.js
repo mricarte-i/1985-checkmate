@@ -101,6 +101,7 @@ function createTile(row, col, tileSize) {
     tile.y = 30 + (row * tileSize * scale);
     tile.interactive = true;
     tile.buttonMode = true;
+    tile.contains = null;
     tile.id = rows * row + col;
     tile.on('mousedown', selectTile);
     if ((row + col) % 2 == 0) {
