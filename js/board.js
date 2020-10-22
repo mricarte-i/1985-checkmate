@@ -1,4 +1,4 @@
-import {Piece, Peon, Torre, Caballo, Alfil, Reina, Rey} from './pieces.js';
+import {Piece, Pawn, Rook, Knight, Bishop, Queen, King} from './pieces.js';
 export default class Board extends PIXI.Container {
 
     rows = 7;
@@ -15,14 +15,14 @@ export default class Board extends PIXI.Container {
             ["sheet_b", sheet_b]
         ]);
         this.gridSetup();
-        this.piecesSetup();
+        //this.piecesSetup();
     }
 
     gridSetup() {
         let tileSize = app.loader.resources.textures.get("tile_w").texture.height;
 
-        for (let i = 0; i <= rows; i++) {
-            for (let j = 0; j <= cols; j++) {
+        for (let i = 0; i <= this.rows; i++) {
+            for (let j = 0; j <= this.cols; j++) {
                 tiles.push(createTile(i, j, tileSize));
             }
         }
@@ -31,26 +31,16 @@ export default class Board extends PIXI.Container {
 
 
     createTile(row, col, tileSize) {
-        //tile object
-        let tile = new PIXI.Sprite.from(app.loader.resources.textures.get("tile_w").texture);
-        tile.anchor.set(0.5);
-        tile.scale.x = scale;
-        tile.scale.y = scale;
-        tile.x = 30 + (col * tileSize * scale);
-        tile.y = 30 + (row * tileSize * scale);
-        tile.interactive = true;
-        tile.buttonMode = true;
-        tile.contains = null;
-        tile.id = rows * row + col;
-        tile.on('mousedown', selectTile);
-        if ((row + col) % 2 == 0) {
-            tile.tint = 0xAAAAAA;
-        }
 
+        let tile = new Tile(row, col, tileSize, textures.get("tile_w"), this.scale);
+        if ((row + col) % 2 == 0) {
+            tile.setTexture(textures.get("tile_b"));
+        }
+        tile.on('mousedown', selectTile);
         this.addChild(tile);
         return tile;
     }
-
+/*
     piecesSetup() {
         let tileSet = [];
         for (let i = 0; i < 6; i++) {
@@ -101,7 +91,7 @@ export default class Board extends PIXI.Container {
             }
         }
     }
-
+*/
     selectTile() {
         if (selectP != null) {
             if (selectP.moveCheck(this.x, this.y)) {
@@ -123,7 +113,7 @@ export class Tile extends PIXI.Sprite{
     row;
     col;
     contains;
-    constructor(row, col, tileSize, texture_w, texture_b){
+    constructor(row, col, tileSize, texture, scale){
         super(texture);
         this.anchor.set(0.5);
         this.scale.x = scale;
@@ -136,7 +126,7 @@ export class Tile extends PIXI.Sprite{
         this.buttonMode = true;
         this.contains = null;
         this.id = rows * row + col;
-        this.on('mousedown', selectTile);
+        //this.on('mousedown', selectTile);
         if ((row + col) % 2 == 0) {
             this.setTexture(texture_b);
         }

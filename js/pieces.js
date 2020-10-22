@@ -23,21 +23,21 @@ export default class Piece extends PIXI.Sprite {
         this.current_tile = tile_dest;
     }
 }
-export class Peon extends Piece {
+export class Pawn extends Piece {
 
 }
-export class Torre extends Piece {
+export class Rook extends Piece {
 
 }
-export class Caballo extends Piece {
+export class Knight extends Piece {
 
 }
-export class Alfil extends Piece {
+export class Bishop extends Piece {
 
 }
-export class Reina extends Piece {
+export class Queen extends Piece {
 
 }
-export class Rey extends Piece {
+export class King extends Piece {
 
 }
