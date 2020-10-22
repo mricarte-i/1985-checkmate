@@ -88,8 +88,9 @@ export default class Board extends PIXI.Container {
         for (let i = 0; i <= this.rows; i++) {
             for (let j = 0; j <= this.cols; j++) {
                 let id = rows * row + col;
-                if(tileHashMap[id] > 0){
-                    let piece = new Piece(tileHashMap.get(id), tiles[id].x, tiles[id].y, i, j);
+                if(piecesStartup[id] > 0){
+                    //let piece = new Piece(tileHashMap.get(id), tiles[id].x, tiles[id].y, i, j);
+                    let piece = new classHashMap.get(piecesStartup[id])(tileHashMap.get(id), tiles[id].x, tiles[id].y, i, j);
                     piece.interactive = true;
                     piece.buttonMode = true;
                     piece.on('mousedown', selectPiece);
@@ -116,6 +117,28 @@ export default class Board extends PIXI.Container {
     selectPiece() {
         selectP = this;
     }
+}
 
-
+export class Tile extends PIXI.Sprite{
+    row;
+    col;
+    contains;
+    constructor(row, col, tileSize, texture_w, texture_b){
+        super(texture);
+        this.anchor.set(0.5);
+        this.scale.x = scale;
+        this.scale.y = scale;
+        this.x = 30 + (col * tileSize * scale);
+        this.y = 30 + (row * tileSize * scale);
+        this.row = row;
+        this.col = col;
+        this.interactive = true;
+        this.buttonMode = true;
+        this.contains = null;
+        this.id = rows * row + col;
+        this.on('mousedown', selectTile);
+        if ((row + col) % 2 == 0) {
+            this.setTexture(texture_b);
+        }
+    }
 }
