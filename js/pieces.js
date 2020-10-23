@@ -6,14 +6,14 @@ export default class Piece extends PIXI.Sprite {
     constructor(texture, tile, team, pieceManager) {
         super(texture)
         this.x = tile.x;
-        this.y = tile.y;
+        this.y = tile.y + 0.01;
         this.anchor.set(0.5, 0.7);
         this.scale.x = 3;
         this.scale.y = 3;
         this.team = team;
         this.pieceManager = pieceManager;
         this.current_tile = tile;
-        this.zIndex = -this.current_tile.row;
+        this.zOrder = -this.y + 7;
 
     }
 
@@ -21,8 +21,8 @@ export default class Piece extends PIXI.Sprite {
         this.current_tile.setContains(null);
         tile_dest.setContains(this);
         this.x = tile_dest.x;
-        this.y = tile_dest.y;
-        this.zIndex = -this.current_tile.row;
+        this.y = tile_dest.y + 0.01;
+        this.zOrder = -this.y + 7;
         this.current_tile = tile_dest;
     }
 }

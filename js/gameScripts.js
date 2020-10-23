@@ -1,8 +1,9 @@
 let app;
 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
-
+PIXI.settings.SORTABLE_CHILDREN = true;
 import GameManager from './gameManager.js';
 
+let board;
 let keys = {};
 
 let keysDiv;
@@ -23,10 +24,8 @@ window.onload = function () {
     app.loader
         .add("white_sheet", "w-pieces-sheet.png")
         .add("black_sheet", "b-pieces-sheet.png")
-        .add("king", "king.png")
         .add("tile_w", "tile.png")
-        .add("tile_b", "tile_b.png")
-        .add("tiles", "basic-sprites.png");
+        .add("tile_b", "tile_b.png");
 
     app.loader.onProgress.add(showProgress);
     app.loader.onComplete.add(doneLoading);
@@ -56,7 +55,8 @@ function gameSetup() {
 
     gm.board.x += app.view.width/6;
     gm.board.y += app.view.height/8;
-    app.stage.addChild(gm.board);
+    board = gm.board
+    app.stage.addChild(board);
 
     //mouse interactions
     app.stage.interactive = true;
@@ -66,6 +66,8 @@ function gameSetup() {
     window.addEventListener("keyup", keysUp);
 
     keysDiv = document.querySelector("#keys");
+
+    app.ticker.add(gameLoop);
 }
 
 function keysDown(e) {
@@ -74,4 +76,15 @@ function keysDown(e) {
 
 function keysUp(e) {
     keys[e.keyCode] = false;
+}
+
+function gameLoop(){
+
+    board.children.sort(function(a,b) {
+        if (a.position.y > b.position.y) return 1;
+        if (a.position.y < b.position.y) return -1;
+        if (a.position.x > b.position.x) return 1;
+        if (a.position.x < b.position.x) return -1;
+        return 0;
+      });
 }

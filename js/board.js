@@ -16,6 +16,7 @@ export default class Board extends PIXI.Container {
             ["sheet_b", sheet_b]
         ]);
         this.gridSetup();
+        this.sortDirty = true;
     }
 
     gridSetup() {
@@ -60,6 +61,7 @@ export class Tile extends PIXI.Sprite{
         this.scale.y = scale;
         this.x = 30 + (col * tileSize * scale);
         this.y = 30 + (row * tileSize * scale);
+        this.zOrder = -16;
         this.row = row;
         this.col = col;
         this.interactive = true;
