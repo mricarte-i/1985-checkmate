@@ -1,7 +1,6 @@
 let app;
 let player;
 
-import Piece from './pieces.js';
 
 let keys = {};
 

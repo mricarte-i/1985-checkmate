@@ -1,3 +1,4 @@
+import {Pawn, Rook, Knight, Bishop, Queen, King} from './pieces.js';
 export default class PieceManager {
     w_pieces = [];
     b_pieces = [];
@@ -5,12 +6,12 @@ export default class PieceManager {
     selectP = null;
 
     classHashMap = new Map([
-        [1, Peon],
-        [2, Torre],
-        [3, Caballo],
-        [4, Alfil],
-        [5, Reina],
-        [6, Rey]
+        [1, Pawn],
+        [2, Rook],
+        [3, Knight],
+        [4, Bishop],
+        [5, Queen],
+        [6, King]
     ]);
 
     w_placing = [0,0,0,0,0,0,0,0,
@@ -29,20 +30,19 @@ export default class PieceManager {
                  0,0,0,0,0,0,0,0,];
 
     constructor(){
-
     }
 
     setup(board){
         let w_tileSet = [];
         for (let i = 0; i < 6; i++) {
-            w_tileSet[i] = new PIXI.Texture(board.textures.get("w_sheet").texture,
+            w_tileSet[i] = new PIXI.Texture(board.textures.get("sheet_w").texture,
                                             new PIXI.Rectangle(i * 30, 0, 30, 35));
         }
         this.w_pieces = this.createPieces("w", board, w_tileSet, this.w_placing);
 
         let b_tileSet = [];
         for (let i = 0; i < 6; i++) {
-            b_tileSet[i] = new PIXI.Texture(board.textures.get("b_sheet").texture,
+            b_tileSet[i] = new PIXI.Texture(board.textures.get("sheet_w").texture,
                                             new PIXI.Rectangle(i * 30, 0, 30, 35));
         }
         this.b_pieces = this.createPieces("b", board, b_tileSet, this.b_placing);
@@ -53,18 +53,39 @@ export default class PieceManager {
         let pieces = [];
         for(let i = 0; i < placing.length; i++){
             if(placing[i] > 0){
-                let piece = new classHashMap.get(placing[id])(spritesheet.get(placing[i - 1]), board.tiles[id], team, this);
+                let piece;
+                switch(placing[i]){
+                    case 1:
+                        piece = new Pawn(spritesheet[placing[i - 1]], board.tiles[i], team, this);
+                        break;
+                    case 2:
+                        piece = new Rook(spritesheet[placing[i - 1]], board.tiles[i], team, this);
+                        break;
+                    case 3:
+                        piece = new Knight(spritesheet[placing[i - 1]], board.tiles[i], team, this);
+                        break;
+                    case 4:
+                        piece = new Bishop(spritesheet[placing[i - 1]], board.tiles[i], team, this);
+                        break;
+                    case 5:
+                        piece = new Queen(spritesheet[placing[i - 1]], board.tiles[i], team, this);
+                        break;
+                    case 6:
+                        piece = new King(spritesheet[placing[i - 1]], board.tiles[i], team, this);
+                        break;
+
+                }
                 piece.interactive = true;
                 piece.buttonMode = true;
-                piece.on('mousedown', selectPiece);
-                board.tiles[id].contains = piece;
+                //piece.on('mousedown', this.selectPiece);
+                pieces.push(piece);
+                board.tiles[i].contains = piece;
                 board.addChild(piece);
+
             }
 
         }
+        return pieces;
     }
 
-    selectPiece() {
-        selectP = this;
-    }
 }
