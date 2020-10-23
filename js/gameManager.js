@@ -2,7 +2,7 @@ import Board from './board.js';
 import PieceManager from './pieceManager.js';
 import {Pawn, Rook, Knight, Bishop, Queen, King} from './pieces.js';
 export default class GameManager {
-    selectP = -1;
+
     board;
     pieceManager;
     constructor(tile_w, tile_b, sheet_w, sheet_b){
@@ -26,29 +26,14 @@ export default class GameManager {
     }
 
     selectTile() {
-        console.log(this.pieceManager.getSelectedPiece());
         if (this.pieceManager.getSelectedPiece() > -1) {
             this.pieceManager.pieces[this.pieceManager.getSelectedPiece()].placePiece(this);
             this.pieceManager.setSelectedPiece(-1)
-            console.log("yo " + this);
-
-        }
-
-        console.log(this.selectP);
-        if (this.selectP > -1) {
-            this.pieceManager.pieces[this.selectP].placePiece(this);
-            this.selectP = -1;
-            console.log("yo " + this);
 
         }
     }
 
     selectPiece() {
-        this.selectP = this.pieceManager.pieces.indexOf(this);
         this.pieceManager.setSelectedPiece(this.pieceManager.pieces.indexOf(this));
-        console.log(this.selectP);
-        if(this.selectP > -1){
-            console.log("nice");
-        }
     }
 }

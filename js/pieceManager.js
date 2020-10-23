@@ -40,14 +40,14 @@ export default class PieceManager {
         let w_tileSet = [];
         for (let i = 0; i < 6; i++) {
             w_tileSet[i] = new PIXI.Texture(board.textures.get("sheet_w").texture,
-                                            new PIXI.Rectangle(i * 30, 0, 30, 35));
+                                            new PIXI.Rectangle(i * 16, 0, 16, 27));
         }
         this.w_pieces = this.createPieces("w", board, w_tileSet, this.w_placing);
 
         let b_tileSet = [];
         for (let i = 0; i < 6; i++) {
             b_tileSet[i] = new PIXI.Texture(board.textures.get("sheet_b").texture,
-                                            new PIXI.Rectangle(i * 30, 0, 30, 35));
+                                            new PIXI.Rectangle(i * 16, 0, 16, 27));
         }
         this.b_pieces = this.createPieces("b", board, b_tileSet, this.b_placing);
 
@@ -60,7 +60,6 @@ export default class PieceManager {
         for(let i = 0; i < placing.length; i++){
             if(placing[i] > 0){
                 let piece;
-                console.log(board.tiles[i].id);
                 switch(placing[i]){
                     case 1:
                         piece = new Pawn(spritesheet[placing[i] -1], board.tiles[i], team, this);

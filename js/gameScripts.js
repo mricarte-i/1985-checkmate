@@ -53,6 +53,9 @@ function gameSetup() {
 
     let gm = new GameManager(app.loader.resources.tile_w, app.loader.resources.tile_b,
         app.loader.resources.white_sheet, app.loader.resources.black_sheet);
+
+    gm.board.x += app.view.width/6;
+    gm.board.y += app.view.height/8;
     app.stage.addChild(gm.board);
 
     //mouse interactions
