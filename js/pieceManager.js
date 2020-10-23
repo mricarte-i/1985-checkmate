@@ -3,7 +3,9 @@ export default class PieceManager {
     w_pieces = [];
     b_pieces = [];
 
-    selectP = null;
+    pieces = [];
+
+    selected_piece = -1;
 
     classHashMap = new Map([
         [1, Pawn],
@@ -19,8 +21,10 @@ export default class PieceManager {
                  0,0,0,0,0,0,0,0,
                  0,0,0,0,0,0,0,0,
                  0,0,0,0,0,0,0,0,
+                 0,0,0,0,0,0,0,0,
                  1,1,1,1,1,1,1,1,
                  2,3,4,5,6,4,3,2];
+
     b_placing = [2,3,4,5,6,4,3,2,
                  1,1,1,1,1,1,1,1,
                  0,0,0,0,0,0,0,0,
@@ -42,50 +46,61 @@ export default class PieceManager {
 
         let b_tileSet = [];
         for (let i = 0; i < 6; i++) {
-            b_tileSet[i] = new PIXI.Texture(board.textures.get("sheet_w").texture,
+            b_tileSet[i] = new PIXI.Texture(board.textures.get("sheet_b").texture,
                                             new PIXI.Rectangle(i * 30, 0, 30, 35));
         }
         this.b_pieces = this.createPieces("b", board, b_tileSet, this.b_placing);
 
+        board.setPieceManager(this);
+
     }
 
     createPieces(team, board, spritesheet, placing){
-        let pieces = [];
+        let some_pieces = [];
         for(let i = 0; i < placing.length; i++){
             if(placing[i] > 0){
                 let piece;
+                console.log(board.tiles[i].id);
                 switch(placing[i]){
                     case 1:
-                        piece = new Pawn(spritesheet[placing[i - 1]], board.tiles[i], team, this);
+                        piece = new Pawn(spritesheet[placing[i] -1], board.tiles[i], team, this);
                         break;
                     case 2:
-                        piece = new Rook(spritesheet[placing[i - 1]], board.tiles[i], team, this);
+                        piece = new Rook(spritesheet[placing[i] -1], board.tiles[i], team, this);
                         break;
                     case 3:
-                        piece = new Knight(spritesheet[placing[i - 1]], board.tiles[i], team, this);
+                        piece = new Knight(spritesheet[placing[i] -1], board.tiles[i], team, this);
                         break;
                     case 4:
-                        piece = new Bishop(spritesheet[placing[i - 1]], board.tiles[i], team, this);
+                        piece = new Bishop(spritesheet[placing[i] -1], board.tiles[i], team, this);
                         break;
                     case 5:
-                        piece = new Queen(spritesheet[placing[i - 1]], board.tiles[i], team, this);
+                        piece = new Queen(spritesheet[placing[i] -1], board.tiles[i], team, this);
                         break;
                     case 6:
-                        piece = new King(spritesheet[placing[i - 1]], board.tiles[i], team, this);
+                        piece = new King(spritesheet[placing[i] -1], board.tiles[i], team, this);
                         break;
 
                 }
                 piece.interactive = true;
                 piece.buttonMode = true;
                 //piece.on('mousedown', this.selectPiece);
-                pieces.push(piece);
-                board.tiles[i].contains = piece;
+                this.pieces.push(piece);
+                some_pieces.push(piece);
+                board.tiles[i].setContains(piece);
                 board.addChild(piece);
 
             }
 
         }
-        return pieces;
+        return some_pieces;
     }
 
+    setSelectedPiece(id) {
+        this.selected_piece = id;
+    }
+
+    getSelectedPiece() {
+        return this.selected_piece;
+    }
 }

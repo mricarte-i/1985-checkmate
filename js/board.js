@@ -4,6 +4,7 @@ export default class Board extends PIXI.Container {
     rows = 7;
     cols = 7;
     scale = 2;
+    pieceManager;
 
     constructor(tile_w, tile_b, sheet_w, sheet_b) {
         super();
@@ -39,17 +40,19 @@ export default class Board extends PIXI.Container {
         return tile;
     }
 
-
-
-    selectPiece() {
-        selectP = this;
+    setPieceManager(pieceManager){
+        this.pieceManager = pieceManager;
+        for(let i=0; i< this.tiles.length; i++){
+            this.tiles[i].setPieceManager(this.pieceManager);
+        }
     }
 }
 
 export class Tile extends PIXI.Sprite{
     row;
     col;
-    contains;
+    contained;
+    pieceManager;
     constructor(row, col, tileSize, texture, scale, rows){
         super(texture);
         this.anchor.set(0.5);
@@ -61,8 +64,19 @@ export class Tile extends PIXI.Sprite{
         this.col = col;
         this.interactive = true;
         this.buttonMode = true;
-        this.contains = null;
+        this.contained = null;
         this.id = rows * row + col;
         //this.on('mousedown', selectTile);
+    }
+
+    setContains(piece){
+        this.contained = piece;
+    }
+    getContains(){
+        return this.contained;
+    }
+
+    setPieceManager(pieceManager){
+        this.pieceManager = pieceManager;
     }
 }

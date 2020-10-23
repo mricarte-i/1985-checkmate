@@ -7,17 +7,21 @@ export default class Piece extends PIXI.Sprite {
         super(texture)
         this.x = tile.x;
         this.y = tile.y;
-        this.anchor.set(0.5, 0.7);
-        this.scale.x = 3;
-        this.scale.y = 3;
+        this.anchor.set(0.5, 1);
+        this.scale.x = 2;
+        this.scale.y = 2;
         this.team = team;
         this.pieceManager = pieceManager;
         this.current_tile = tile;
+
+
     }
 
     placePiece(tile_dest){
-        current_tile.contains = null;
-        tile_dest.contains = this;
+        console.log(this.current_tile);
+        this.current_tile.setContains(null);
+        tile_dest.setContains(this);
+        console.log("x=" + this.x + " y=" + this.y)
         this.x = tile_dest.x;
         this.y = tile_dest.y;
         this.current_tile = tile_dest;
