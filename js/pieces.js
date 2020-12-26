@@ -17,11 +17,20 @@ export default class Piece extends PIXI.Sprite {
         this.pieceManager = pieceManager;
         this.current_tile = tile;
         this.zOrder = -this.y + 7;
+        this.highlightedCells = [];
+    }
 
+    kill(){
+        this.destroy();
+        //thank you PixiJS
     }
 
     placePiece(tile_dest){
         this.current_tile.setContains(null);
+        if(tile_dest.getContains() != null){
+            tile_dest.getContains().kill();
+            tile_dest.setContains(null);
+        }
         tile_dest.setContains(this);
         this.x = tile_dest.x;
         this.y = tile_dest.y + 0.01;
@@ -33,14 +42,12 @@ export default class Piece extends PIXI.Sprite {
     createTilePath(xDir, yDir, movement){
         let currRow = this.current_tile.row;
         let currCol = this.current_tile.col;
-
-        console.log(currRow + ' ' + currCol);
         for(let i = 1; i<= movement; i++){
             currCol += xDir;
             currRow += yDir;
-            console.log(currRow + ' ' + currCol);
+
             //get state of the target tile
-            if(!this.current_tile.board.outOfBounds(currRow, currCol)){
+            if(this.current_tile.board.validate(currRow, currCol, this.team)){
                 this.highlightedCells.push(this.current_tile.board.getTileAt(currRow, currCol));
             }
         }

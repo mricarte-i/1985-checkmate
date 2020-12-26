@@ -35,8 +35,17 @@ export default class GameManager {
     }
 
     selectPiece() {
-        this.pieceManager.setSelectedPiece(this.pieceManager.pieces.indexOf(this));
-        this.checkPathing();
-        this.showTiles();
+        if(this.pieceManager.getSelectedPiece() != -1){
+            this.pieceManager.pieces[this.pieceManager.getSelectedPiece()].clearTiles();
+            if(this.team != this.pieceManager.pieces[this.pieceManager.getSelectedPiece()].team){
+                this.pieceManager.pieces[this.pieceManager.getSelectedPiece()].placePiece(this.current_tile);
+            }
+            this.pieceManager.setSelectedPiece(-1);
+        }else{
+            this.pieceManager.setSelectedPiece(this.pieceManager.pieces.indexOf(this));
+            this.checkPathing();
+            this.showTiles();
+        }
+
     }
 }

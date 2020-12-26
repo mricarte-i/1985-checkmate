@@ -33,7 +33,6 @@ export default class Board extends PIXI.Container {
     }
 
     getTileAt(row,col){
-        console.log('me llega '+ row + ' ' + col);
         //TO DO:
         //  +do it with a math function and not this bullshit
         for(var idx in this.tiles){
@@ -63,8 +62,14 @@ export default class Board extends PIXI.Container {
         }
     }
 
-    outOfBounds(row, col){
-        return (row > this.rows || col > this.cols);
+    validate(row, col, team){
+        var response = (row <= this.rows && col <= this.cols);
+        response = response && (row >= 0 && col >= 0);
+        let tile = this.getTileAt(row, col);
+        if(tile != null && tile.getContains() != null){
+            response = response && (tile.getContains().team != team);
+        }
+        return response;
     }
 }
 
