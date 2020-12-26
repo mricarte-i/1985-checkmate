@@ -24,6 +24,8 @@ window.onload = function () {
     app.loader
         .add("white_sheet", "w-pieces-sheet.png")
         .add("black_sheet", "b-pieces-sheet.png")
+        .add("tile_w_highlight", "tile_w-highlight.png")
+        .add("tile_b_highlight", "tile_b-highlight.png")
         .add("tile_w", "tile.png")
         .add("tile_b", "tile_b.png");
 
@@ -51,7 +53,7 @@ function doneLoading(e) {
 function gameSetup() {
 
     let gm = new GameManager(app.loader.resources.tile_w, app.loader.resources.tile_b,
-        app.loader.resources.white_sheet, app.loader.resources.black_sheet);
+        app.loader.resources.white_sheet, app.loader.resources.black_sheet, app.loader.resources.tile_w_highlight, app.loader.resources.tile_b_highlight);
 
     gm.board.x += app.view.width/6;
     gm.board.y += app.view.height/8;

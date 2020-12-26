@@ -5,10 +5,10 @@ export default class GameManager {
 
     board;
     pieceManager;
-    constructor(tile_w, tile_b, sheet_w, sheet_b){
+    constructor(tile_w, tile_b, sheet_w, sheet_b, hl_w, hl_b){
         this.pieceManager = new PieceManager();
 
-        this.board = new Board(tile_w, tile_b, sheet_w, sheet_b);
+        this.board = new Board(tile_w, tile_b, sheet_w, sheet_b, hl_w, hl_b);
 
         this.pieceManager.setup(this.board);
 
@@ -27,6 +27,7 @@ export default class GameManager {
 
     selectTile() {
         if (this.pieceManager.getSelectedPiece() > -1) {
+            this.pieceManager.pieces[this.pieceManager.getSelectedPiece()].clearTiles();
             this.pieceManager.pieces[this.pieceManager.getSelectedPiece()].placePiece(this);
             this.pieceManager.setSelectedPiece(-1)
 
@@ -35,5 +36,7 @@ export default class GameManager {
 
     selectPiece() {
         this.pieceManager.setSelectedPiece(this.pieceManager.pieces.indexOf(this));
+        this.checkPathing();
+        this.showTiles();
     }
 }

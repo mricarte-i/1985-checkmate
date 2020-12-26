@@ -3,6 +3,9 @@ export default class Piece extends PIXI.Sprite {
     pieceManager;
     current_tile;
 
+    highlightedCells = [];
+    movement = {x: 1, y: 1, z: 1};
+
     constructor(texture, tile, team, pieceManager) {
         super(texture)
         this.x = tile.x;
@@ -24,6 +27,55 @@ export default class Piece extends PIXI.Sprite {
         this.y = tile_dest.y + 0.01;
         this.zOrder = -this.y + 7;
         this.current_tile = tile_dest;
+    }
+
+    //movement
+    createTilePath(xDir, yDir, movement){
+        let currRow = this.current_tile.row;
+        let currCol = this.current_tile.col;
+
+        console.log(currRow + ' ' + currCol);
+        for(let i = 1; i<= movement; i++){
+            currCol += xDir;
+            currRow += yDir;
+            console.log(currRow + ' ' + currCol);
+            //get state of the target tile
+            if(!this.current_tile.board.outOfBounds(currRow, currCol)){
+                this.highlightedCells.push(this.current_tile.board.getTileAt(currRow, currCol));
+            }
+        }
+    }
+
+    checkPathing(){
+
+        //horizontal
+        this.createTilePath(1, 0, this.movement.x);
+        this.createTilePath(-1, 0, this.movement.x);
+
+        //vertical
+        this.createTilePath(0, 1, this.movement.y);
+        this.createTilePath(0, -1, this.movement.y);
+
+        //upper diagonal
+        this.createTilePath(1, 1, this.movement.z);
+        this.createTilePath(-1, 1, this.movement.z);
+
+        //lower diagonal
+        this.createTilePath(-1, -1, this.movement.z);
+        this.createTilePath(1, -1, this.movement.z);
+    }
+
+    showTiles(){
+        for(var idx in this.highlightedCells){
+            this.highlightedCells[idx].outlineOn();
+        }
+    }
+
+    clearTiles(){
+        for(var idx in this.highlightedCells){
+            this.highlightedCells[idx].outlineOff();
+        }
+        this.highlightedCells = [];
     }
 }
 export class Pawn extends Piece {

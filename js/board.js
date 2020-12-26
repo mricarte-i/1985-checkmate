@@ -5,13 +5,16 @@ export default class Board extends PIXI.Container {
     cols = 7;
     scale = 2;
     pieceManager;
+    tiles = [];
 
-    constructor(tile_w, tile_b, sheet_w, sheet_b) {
+    constructor(tile_w, tile_b, sheet_w, sheet_b, hl_w, hl_b) {
         super();
         this.tiles = [];
         this.textures = new Map([
             ["tile_w", tile_w],
             ["tile_b", tile_b],
+            ["hl_w", hl_w],
+            ["hl_b", hl_b],
             ["sheet_w", sheet_w],
             ["sheet_b", sheet_b]
         ]);
@@ -29,12 +32,24 @@ export default class Board extends PIXI.Container {
         }
     }
 
+    getTileAt(row,col){
+        console.log('me llega '+ row + ' ' + col);
+        //TO DO:
+        //  +do it with a math function and not this bullshit
+        for(var idx in this.tiles){
+            if(this.tiles[idx].row == row && this.tiles[idx].col == col){
+                return this.tiles[idx];
+            }
+        }
+    }
+
 
     createTile(row, col, tileSize) {
 
-        let tile = new Tile(row, col, tileSize, this.textures.get("tile_w").texture, this.scale, this.rows);
+        let tile = new Tile(row, col, tileSize, this.textures.get("tile_w").texture, this.scale, this.rows, this);
         if ((row + col) % 2 == 0) {
             tile.texture = this.textures.get("tile_b").texture;
+            tile.normalTile = tile.texture;
         }
         //tile.on('mousedown', this.selectTile);
         this.addChild(tile);
@@ -47,6 +62,10 @@ export default class Board extends PIXI.Container {
             this.tiles[i].setPieceManager(this.pieceManager);
         }
     }
+
+    outOfBounds(row, col){
+        return (row > this.rows || col > this.cols);
+    }
 }
 
 export class Tile extends PIXI.Sprite{
@@ -54,19 +73,31 @@ export class Tile extends PIXI.Sprite{
     col;
     contained;
     pieceManager;
-    constructor(row, col, tileSize, texture, scale, rows){
+
+    board;
+    normalTile;
+
+    constructor(row, col, tileSize, texture, scale, rows, board){
         super(texture);
+
+        this.board = board;
+        this.normalTile = texture;
+
         this.anchor.set(0.5);
         this.scale.x = scale;
         this.scale.y = scale;
+
         this.x = 30 + (col * tileSize * scale);
         this.y = 30 + (row * tileSize * scale);
         this.zOrder = -16;
+
         this.row = row;
         this.col = col;
+
         this.interactive = true;
         this.buttonMode = true;
         this.contained = null;
+
         this.id = rows * row + col;
         //this.on('mousedown', selectTile);
     }
@@ -80,5 +111,15 @@ export class Tile extends PIXI.Sprite{
 
     setPieceManager(pieceManager){
         this.pieceManager = pieceManager;
+    }
+
+    outlineOn(){
+        this.texture = this.board.textures.get("hl_w").texture;
+        if ((this.row + this.col) % 2 == 0) {
+            this.texture = this.board.textures.get("hl_b").texture;
+        }
+    }
+    outlineOff(){
+        this.texture = this.normalTile;
     }
 }
