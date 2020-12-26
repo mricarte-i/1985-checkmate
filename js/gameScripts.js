@@ -6,6 +6,8 @@ import GameManager from './gameManager.js';
 let board;
 let keys = {};
 
+let gameManager;
+
 let keysDiv;
 let gameDiv;
 
@@ -52,12 +54,12 @@ function doneLoading(e) {
 
 function gameSetup() {
 
-    let gm = new GameManager(app.loader.resources.tile_w, app.loader.resources.tile_b,
+    gameManager = new GameManager(app.loader.resources.tile_w, app.loader.resources.tile_b,
         app.loader.resources.white_sheet, app.loader.resources.black_sheet, app.loader.resources.tile_w_highlight, app.loader.resources.tile_b_highlight);
 
-    gm.board.x += app.view.width/6;
-    gm.board.y += app.view.height/8;
-    board = gm.board
+    gameManager.board.x += app.view.width/6;
+    gameManager.board.y += app.view.height/8;
+    board = gameManager.board
     app.stage.addChild(board);
 
     //mouse interactions
@@ -89,4 +91,9 @@ function gameLoop(){
         if (a.position.x < b.position.x) return -1;
         return 0;
       });
+
+    if(gameManager.checkIfOver()){
+        gameManager.endGame();
+        gameSetup();
+    }
 }

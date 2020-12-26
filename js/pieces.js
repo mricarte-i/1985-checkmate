@@ -86,10 +86,30 @@ export default class Piece extends PIXI.Sprite {
     }
 }
 export class Pawn extends Piece {
+    constructor(texture, tile, team, pieceManager) {
+        super(texture, tile, team, pieceManager);
+        if(team == "w"){
+            this.movement = {x: 0, y: 1, z: 1};
+        }else{
+            this.movement = {x: 0, y: 1, z: 1};
+        }
+        this.firstMove = true;
+
+    }
+
+    placePiece(tile_dest){
+        super.placePiece(tile_dest);
+
+        this.firstMove = false;
+    }
+
 
 }
 export class Rook extends Piece {
-
+    constructor(texture, tile, team, pieceManager) {
+        super(texture, tile, team, pieceManager);
+        this.movement = {x: 7, y: 7, z: 0};
+    }
 }
 export class Knight extends Piece {
 
@@ -101,5 +121,12 @@ export class Queen extends Piece {
 
 }
 export class King extends Piece {
+    kill(){
+        this.pieceManager.deadKing(this.team);
+        super.kill();
+    }
+
+    showTiles(){
+    }
 
 }

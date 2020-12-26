@@ -48,4 +48,15 @@ export default class GameManager {
         }
 
     }
+
+    checkIfOver(){
+        return this.pieceManager.gameover != null;
+    }
+
+    endGame(){
+        this.board.destroy();
+        console.log(this.pieceManager.gameover + " has lost the game!");
+        this.pieceManager = null;
+        this.board = null;
+    }
 }

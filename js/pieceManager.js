@@ -5,6 +5,8 @@ export default class PieceManager {
 
     pieces = [];
 
+    gameover;
+
     selected_piece = -1;
 
     classHashMap = new Map([
@@ -53,6 +55,7 @@ export default class PieceManager {
 
         board.setPieceManager(this);
 
+        this.gameover = null;
     }
 
     createPieces(team, board, spritesheet, placing){
@@ -102,4 +105,9 @@ export default class PieceManager {
     getSelectedPiece() {
         return this.selected_piece;
     }
+
+    deadKing(team){
+        this.gameover = team;
+    }
+
 }
