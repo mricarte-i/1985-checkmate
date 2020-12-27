@@ -7,6 +7,8 @@ export default class Board extends PIXI.Container {
     pieceManager;
     tiles = [];
 
+    TileState = {"outOfBounds": 0, "empty": 1, "friendly": 2, "enemy": 3};
+
     constructor(tile_w, tile_b, sheet_w, sheet_b, hl_w, hl_b) {
         super();
         this.tiles = [];
@@ -70,6 +72,27 @@ export default class Board extends PIXI.Container {
             response = response && (tile.getContains().team != team);
         }
         return response;
+    }
+
+    checkTile(row, col, team){
+        var response = (row <= this.rows && col <= this.cols);
+        response = response && (row >= 0 && col >= 0);
+        if(!response){
+            return this.TileState.outOfBounds;
+        }else{
+            let tile = this.getTileAt(row, col);
+            if(tile != null){
+                if(tile.getContains() != null){
+                    if(tile.getContains().team != team){
+                        return this.TileState.enemy;
+                    }else{
+                        return this.TileState.friendly;
+                    }
+                }else{
+                    return this.TileState.empty;
+                }
+            }
+        }
     }
 }
 

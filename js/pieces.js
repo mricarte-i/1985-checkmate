@@ -3,7 +3,7 @@ export default class Piece extends PIXI.Sprite {
     pieceManager;
     current_tile;
 
-    highlightedCells = [];
+    highlightedTiles = [];
     movement = {x: 1, y: 1, z: 1};
 
     constructor(texture, tile, team, pieceManager) {
@@ -17,7 +17,7 @@ export default class Piece extends PIXI.Sprite {
         this.pieceManager = pieceManager;
         this.current_tile = tile;
         this.zOrder = -this.y + 7;
-        this.highlightedCells = [];
+        this.highlightedTiles = [];
     }
 
     kill(){
@@ -46,10 +46,25 @@ export default class Piece extends PIXI.Sprite {
             currCol += xDir;
             currRow += yDir;
 
-            //get state of the target tile
-            if(this.current_tile.board.validate(currRow, currCol, this.team)){
-                this.highlightedCells.push(this.current_tile.board.getTileAt(currRow, currCol));
+            let state = this.current_tile.board.checkTile(currRow, currCol, this.team);
+            if(state != this.current_tile.board.TileState.outOfBounds){
+                switch(state){
+                    case this.current_tile.board.TileState.enemy:
+                        this.highlightedTiles.push(this.current_tile.board.getTileAt(currRow, currCol));
+                        i = movement +1;
+                        break;
+                    case this.current_tile.board.TileState.friendly:
+                        i = movement +1;
+                        break;
+                    case this.current_tile.board.TileState.empty:
+                        this.highlightedTiles.push(this.current_tile.board.getTileAt(currRow, currCol));
+                        break;
+                    default:
+                        i = movement +1;
+                        break;
+                }
             }
+
         }
     }
 
@@ -73,16 +88,20 @@ export default class Piece extends PIXI.Sprite {
     }
 
     showTiles(){
-        for(var idx in this.highlightedCells){
-            this.highlightedCells[idx].outlineOn();
+        for(var idx in this.highlightedTiles){
+            this.highlightedTiles[idx].outlineOn();
         }
     }
 
     clearTiles(){
-        for(var idx in this.highlightedCells){
-            this.highlightedCells[idx].outlineOff();
+        for(var idx in this.highlightedTiles){
+            this.highlightedTiles[idx].outlineOff();
         }
-        this.highlightedCells = [];
+        this.highlightedTiles = [];
+    }
+
+    getHighlightedTiles(){
+        return this.highlightedTiles;
     }
 }
 export class Pawn extends Piece {

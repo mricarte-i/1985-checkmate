@@ -26,21 +26,27 @@ export default class GameManager {
     }
 
     selectTile() {
-        if (this.pieceManager.getSelectedPiece() > -1) {
-            this.pieceManager.pieces[this.pieceManager.getSelectedPiece()].clearTiles();
-            this.pieceManager.pieces[this.pieceManager.getSelectedPiece()].placePiece(this);
-            this.pieceManager.setSelectedPiece(-1)
+        if (this.pieceManager.getSelectedPiece() > -1){
 
+            if (this.pieceManager.pieces[this.pieceManager.getSelectedPiece()] != null
+                && this.pieceManager.pieces[this.pieceManager.getSelectedPiece()].getHighlightedTiles().includes(this)) {
+                this.pieceManager.pieces[this.pieceManager.getSelectedPiece()].placePiece(this);
+            }
+
+            this.pieceManager.pieces[this.pieceManager.getSelectedPiece()].clearTiles();
+            this.pieceManager.setSelectedPiece(-1);
         }
     }
 
     selectPiece() {
         if(this.pieceManager.getSelectedPiece() != -1){
-            this.pieceManager.pieces[this.pieceManager.getSelectedPiece()].clearTiles();
-            if(this.team != this.pieceManager.pieces[this.pieceManager.getSelectedPiece()].team){
+            if (this.pieceManager.pieces[this.pieceManager.getSelectedPiece()].getHighlightedTiles().includes(this.current_tile)){
                 this.pieceManager.pieces[this.pieceManager.getSelectedPiece()].placePiece(this.current_tile);
             }
+
+            this.pieceManager.pieces[this.pieceManager.getSelectedPiece()].clearTiles();
             this.pieceManager.setSelectedPiece(-1);
+
         }else{
             this.pieceManager.setSelectedPiece(this.pieceManager.pieces.indexOf(this));
             this.checkPathing();
