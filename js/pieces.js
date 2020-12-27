@@ -42,7 +42,9 @@ export default class Piece extends PIXI.Sprite {
     createTilePath(xDir, yDir, movement){
         let currRow = this.current_tile.row;
         let currCol = this.current_tile.col;
+
         for(let i = 1; i<= movement; i++){
+
             currCol += xDir;
             currRow += yDir;
 
@@ -60,6 +62,7 @@ export default class Piece extends PIXI.Sprite {
                         this.highlightedTiles.push(this.current_tile.board.getTileAt(currRow, currCol));
                         break;
                     default:
+                        console.log('HOWMST\'VE');
                         i = movement +1;
                         break;
                 }
@@ -105,13 +108,13 @@ export default class Piece extends PIXI.Sprite {
     }
 }
 export class Pawn extends Piece {
+    firstMove = false;
+
     constructor(texture, tile, team, pieceManager) {
         super(texture, tile, team, pieceManager);
-        if(team == "w"){
-            this.movement = {x: 0, y: 1, z: 1};
-        }else{
-            this.movement = {x: 0, y: 1, z: 1};
-        }
+
+        this.movement = {x: 0, y: 1, z: 1};
+
         this.firstMove = true;
 
     }
@@ -120,6 +123,55 @@ export class Pawn extends Piece {
         super.placePiece(tile_dest);
 
         this.firstMove = false;
+    }
+
+    checkDiagonals(){
+        if(this.team == "w"){
+            this.highlightedTiles = this.highlightedTiles.filter(function(tile, idx, arr){ return tile.board.checkTile(tile.row, tile.col, "w") == tile.board.TileState.enemy});
+        }else{
+            this.highlightedTiles = this.highlightedTiles.filter(function(tile, idx, arr){ return tile.board.checkTile(tile.row, tile.col, "b") == tile.board.TileState.enemy});
+        }
+    }
+
+    checkVertical(){
+        let badIdx = -1;
+        for(var idx in this.highlightedTiles){
+            let tile = this.highlightedTiles[idx];
+            if(tile.col == this.current_tile.col && tile.board.checkTile(tile.row, tile.col, this.team) != tile.board.TileState.empty){
+                badIdx = idx;
+            }
+        }
+        if(badIdx != -1){
+            this.highlightedTiles.splice(badIdx, 1);
+        }
+    }
+
+    checkPathing(){
+
+        if(this.team == "b"){
+                //lower diagonal
+                super.createTilePath(1, 1, this.movement.z);
+                super.createTilePath(-1, 1, this.movement.z);
+        }else{
+                //upper diagonal
+                this.createTilePath(-1, -1, this.movement.z);
+                this.createTilePath(1, -1, this.movement.z);
+        }
+
+
+        this.checkDiagonals();
+
+        if(this.team =="w"){
+             //vertical
+            super.createTilePath(0, -1, this.movement.y + this.firstMove);
+        }else{
+            this.createTilePath(0, 1, this.movement.y + this.firstMove);
+        }
+
+        this.checkVertical();
+
+        console.log(this.highlightedTiles);
+
     }
 
 
@@ -134,9 +186,17 @@ export class Knight extends Piece {
 
 }
 export class Bishop extends Piece {
+    constructor(texture, tile, team, pieceManager) {
+        super(texture, tile, team, pieceManager);
+        this.movement = {x: 0, y: 0, z: 7};
+    }
 
 }
 export class Queen extends Piece {
+    constructor(texture, tile, team, pieceManager) {
+        super(texture, tile, team, pieceManager);
+        this.movement = {x: 7, y: 7, z: 7};
+    }
 
 }
 export class King extends Piece {
@@ -144,8 +204,4 @@ export class King extends Piece {
         this.pieceManager.deadKing(this.team);
         super.kill();
     }
-
-    showTiles(){
-    }
-
 }
