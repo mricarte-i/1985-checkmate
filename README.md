@@ -17,3 +17,7 @@ At the moment there is no turn system, no castling, no promoting, etc.. It has t
 > Pixi.js, so seeing other people use it as well to learn how to this
 > framework.
 
+
+ - X piece isn't moving right...
+>  I screwed up, give me a minute.
+
