@@ -7,6 +7,8 @@ At the moment there is no turn system, no castling, no promoting, etc.. It has t
 [Demo here](https://mricarte-i.github.io/1985-checkmate/)
 
 
+Really, the most interesting part for me was getting the sprites for the pieces and the tiles from the spritesheets.
+
 # FAQ
 
  - Will you keep working on this?
